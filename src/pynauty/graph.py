@@ -24,6 +24,8 @@ __all__ = [
     'certificate',
     'canon_label',
     'delete_random_edge',
+    'relabel',
+    'random_relabel',
 ]
 
 from . import nautywrap
@@ -251,4 +253,41 @@ def delete_random_edge(g):
         # the graph has no edges
         x, y = None, None
     return (x, y)
+
+
+def relabel(g, xs):
+    '''
+    Return a new graph created from *g* by relabeling the nodes
+    according to the given *xs* permutation of its vertices.
+    
+    *g*
+        A Graph object.
+
+    *xs*
+        A permutation of the labels of *g*
+
+    return ->
+        The new relabeled graph.
+    '''
+    if sorted(xs) != list(range(g.number_of_vertices)):
+        raise ValueError(f"{xs} is not a permutation of g's vertices")
+    h = Graph(number_of_vertices=g.number_of_vertices,
+            directed=g.directed)
+    for k, v in g.adjacency_dict.items():
+        k_ = xs[k]
+        v_ = []
+        for x in v:
+            v_.append(xs[x])
+        h._adjacency_dict[k_] = v_
+    for c in g.vertex_coloring:
+        p = set()
+        for v in c:
+            p.add(xs[v])
+        h._vertex_coloring.append(p)
+    return h
+
+
+def random_relabel(g):
+    xs = random.sample(range(g.number_of_vertices), g.number_of_vertices)
+    return relabel(g, xs) , xs
 
