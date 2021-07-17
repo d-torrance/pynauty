@@ -2,7 +2,7 @@
 
 import sys
 import copy
-from pynauty import isomorphic, delete_random_edge, Version, canon_label
+from pynauty import isomorphic, delete_random_edge, Version, random_relabel
 import pytest
 
 
@@ -13,9 +13,8 @@ def test_isomorphic(graph):
     gname, g, numorbit, grpsize, gens = graph
     print('%-37s ...' % gname, end=' ')
     sys.stdout.flush()
-    x = g.copy()
+    x, xs = random_relabel(g)
     assert isomorphic(g,x)
-    assert canon_label(g) == canon_label(x)
     e = delete_random_edge(x)
     print('    removed random edge {:<13} ...'.format(str(e)), end=' ')
     assert not isomorphic(g,x)
