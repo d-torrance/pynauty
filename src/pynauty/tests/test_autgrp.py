@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from pynauty import autgrp, Version
+from pynauty import autgrp
 import pytest
 
 # List of graphs for testing
@@ -14,8 +14,5 @@ import pytest
 
 def test_autgrp(graph):
     gname, g, numorbit, grpsize, gens = graph
-    print(Version())
-    print('%-17s ...' % gname, end=' ')
-    sys.stdout.flush()
     generators, order, o2, orbits, orbit_no = autgrp(g)
     assert generators == gens and orbit_no == numorbit and order == grpsize

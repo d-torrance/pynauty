@@ -2,13 +2,20 @@
 
 include Makefile.common
 
+TESTS_DIR = src/pynauty/tests
+TESTS = $(TESTS_DIR)/test_autgrp.py $(TESTS_DIR)/test_isomorphic.py
+TEST_CANONLABEL =  $(TESTS_DIR)/test_canonlabel.py
+
 pynauty:
 	$(PYTHON) setup.py build
 
 .PHONY: tests
 tests: pynauty
 	PYTHONPATH="${LIBPATH}:$(PYTHONPATH)" $(PYTHON) $(MODULE_TEST) pytest
-	PYTHONPATH="${LIBPATH}:$(PYTHONPATH)" $(PYTHON) -m pytest src/pynauty/tests
+	PYTHONPATH="${LIBPATH}:$(PYTHONPATH)" $(PYTHON) -m pytest -v $(TESTS)
+
+canonlabel-test: pynauty
+	PYTHONPATH="${LIBPATH}:$(PYTHONPATH)" $(PYTHON) -m pytest -v $(TEST_CANONLABEL)
 
 minimal-test: pynauty
 	PYTHONPATH="${LIBPATH}:$(PYTHONPATH)" $(PYTHON) src/pynauty/tests/test_minimal.py
